@@ -47,6 +47,11 @@ scrollphat.write_string('BTC ' + currentPrice + ' | ' +percentage , 11)
 servo.moveTo(0)
 
 timestamp = int(time.time())
+while True:
+ 
+   time.sleep(10) # sleep 10 sec
+   if int(time.time()-timestamp) > 10*60*1000:
+      saveToDatabase()
 
 while True:
     try:
@@ -55,9 +60,3 @@ while True:
     except KeyboardInterrupt:
         scrollphat.clear()
         sys.exit(-1)
-    if int(time.time()-timestamp) > 10*1000:
-
-
-        scrollphat.clear()
-        servo.moveTo(15)
-
