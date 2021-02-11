@@ -5,6 +5,7 @@ import time
 import cryptocompare as cc
 import scrollphat
 import secrets
+import servo
 
 def get_change(current, previous):
     if current == previous:
@@ -42,6 +43,8 @@ print(percentage)
 
 scrollphat.set_brightness(55)
 scrollphat.write_string('BTC ' + currentPrice + ' | ' +percentage , 11)
+
+servo.moveTo(0)
 
 while True:
     try:
