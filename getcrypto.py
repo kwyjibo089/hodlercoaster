@@ -37,7 +37,7 @@ def update_price(ticker):
     print(percentage)
 
     scrollphat.set_brightness(55)
-    scrollphat.write_string('BTC ' + currentPrice + ' | ' +percentage , 11)
+    scrollphat.write_string(ticker + ' ' + currentPrice + ' | ' + percentage, 11)
 
 
 print("""
@@ -52,15 +52,20 @@ Usage: {} "ticker"
 
 ticker = sys.argv[1]
 
-timestamp = int(time.time())
+update_price(ticker)
 
-while True:
+timestamp = int(time.time())
+print(timestamp)
+
+while True:         
     try:
         scrollphat.scroll()
         time.sleep(0.15)
+        if int(time.time()-timestamp) > 10:
+            scrollphat.clear()
+            update_price(ticker)
+            timestamp = int(time.time())
     except KeyboardInterrupt:
         scrollphat.clear()
         sys.exit(-1)
-    if int(time.time()-timestamp) > 10*1000:
-        scrollphat.clear()
-        update_price(ticker)
+    
