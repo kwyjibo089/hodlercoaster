@@ -23,7 +23,6 @@ def moveTo (angle) :
     pwm.stop()
     GPIO.cleanup()
 
-
 GPIO.setwarnings(False) #Disable warnings
 
 #Use pin 4 for PWM signal
