@@ -50,6 +50,12 @@ def update_price(ticker):
     return change
 
 def setAngle(angle):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(pwm_gpio, GPIO.OUT)
+
+    pwm=GPIO.PWM(pwm_gpio, 50)
+    pwm.start(0)
+
     duty = angle / 18 + 3
     GPIO.output(pwm_gpio, True)
     pwm.ChangeDutyCycle(duty)
@@ -57,15 +63,13 @@ def setAngle(angle):
     GPIO.output(pwm_gpio, False)
     pwm.ChangeDutyCycle(duty)
 
+    pwm.stop()
+    GPIO.cleanup()
+
 GPIO.setwarnings(False) #Disable warnings
 
 #Use pin 4 for PWM signal
 pwm_gpio = 4
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(pwm_gpio, GPIO.OUT)
-
-pwm=GPIO.PWM(pwm_gpio, 50)
-pwm.start(0)
 
 setAngle(90)
 
@@ -107,7 +111,5 @@ while True:
             timestamp = int(time.time())
     except KeyboardInterrupt:
         scrollphat.clear()
-        pwm.stop()
-        GPIO.cleanup()
         sys.exit(-1)
     
