@@ -2,6 +2,8 @@
 
 ![alt text](img/PXL_20210214_093241594.jpg "hodler coaster")
 
+more photos: https://imgur.com/a/OUQkVE3
+
 ## howto
 
 ### pre condition
