@@ -61,23 +61,25 @@ def angle_to_percent (angle) :
 
     return start + angle_as_percent
 
-def moveTo (angle) :
-    pwm.start(angle_to_percent(angle))
-    time.sleep(0.5)
-    #Close GPIO & cleanup
-    pwm.stop()
-    GPIO.cleanup()
+def setAngle(angle):
+    duty = angle / 18 + 3
+    GPIO.output(11, True)
+    pwm.ChangeDutyCycle(duty)
+    time.sleep(1)
+    GPIO.output(11, False)
+    pwm.ChangeDutyCycle(duty)
 
 
 GPIO.setwarnings(False) #Disable warnings
 
 #Use pin 4 for PWM signal
-pwm_gpio = 4
-frequence = 50
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(pwm_gpio, GPIO.OUT)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(4, GPIO.OUT)
 
-pwm = GPIO.PWM(pwm_gpio, frequence)
+pwm=GPIO.PWM(4, 50)
+pwm.start(0)
+
+setAngle(90)
 
 print("""
 Press Ctrl+C to exit!
@@ -90,7 +92,7 @@ Usage: {} "ticker"
     sys.exit(0)
 
 currentAngle = 90
-moveTo(currentAngle)
+setAngle(currentAngle)
 time.sleep(1)
 
 ticker = sys.argv[1]
@@ -98,7 +100,7 @@ ticker = sys.argv[1]
 currentPercentage = update_price(ticker) * 100
 angle = percentageToAngle(currentPercentage)
 print("angle: " + str(angle))
-moveTo(angle)
+setAngle(angle)
 
 timestamp = int(time.time())
 
@@ -112,10 +114,12 @@ while True:
             currentPercentage = math.ceil(currentPercentage) if (currentPercentage > 1) else math.floor(currentPercentage)
             currentAngle = percentageToAngle(currentPercentage)
             print("current angle: " + str(currentAngle) + " currentPercentage: " + str(currentPercentage))
-            moveTo(currentAngle)
+            setAngle(currentAngle)
             time.sleep(1)
             timestamp = int(time.time())
     except KeyboardInterrupt:
         scrollphat.clear()
+        pwm.stop()
+        GPIO.cleanup()
         sys.exit(-1)
     
