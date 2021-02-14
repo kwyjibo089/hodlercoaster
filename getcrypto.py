@@ -1,6 +1,8 @@
+
 #!/usr/bin/env python
 import time
 import sys
+import math
 import time
 import cryptocompare as cc
 import scrollphat
@@ -14,6 +16,12 @@ def get_change(current, previous):
         return ((current - previous) / previous)
     except ZeroDivisionError:
         return 0
+
+def percentageToAngle(percentage):
+    angle = (percentage*12/5)+90
+    angle = 54 if angle < 54 else angle
+    angle = 126 if angle > 126 else angle
+    return angle
 
 def update_price(ticker):
     cc.cryptocompare._set_api_key_parameter(secrets.API_KEY_CRYPTOCOMPARE)
@@ -39,6 +47,8 @@ def update_price(ticker):
     scrollphat.set_brightness(55)
     scrollphat.write_string(ticker + ' ' + currentPrice + ' | ' + percentage, 11)
 
+    return change
+
 
 print("""
 Press Ctrl+C to exit!
@@ -50,12 +60,18 @@ Usage: {} "ticker"
 """.format(sys.argv[0]))
     sys.exit(0)
 
+currentAngle = 90
+servo.moveTo(currentAngle)
+time.sleep(1)
+
 ticker = sys.argv[1]
 
-update_price(ticker)
+currentPercentage = update_price(ticker) * 100
+angle = percentageToAngle(currentPercentage)
+print("angle: " + str(angle))
+servo.moveTo(angle)
 
 timestamp = int(time.time())
-print(timestamp)
 
 while True:         
     try:
@@ -63,7 +79,12 @@ while True:
         time.sleep(0.15)
         if int(time.time()-timestamp) > 10:
             scrollphat.clear()
-            update_price(ticker)
+            currentPercentage = update_price(ticker) * 100
+            currentPercentage = math.ceil(currentPercentage) if (currentPercentage > 1) else math.floor(currentPercentage)
+            currentAngle = percentageToAngle(currentPercentage)
+            print("current angle: " + str(currentAngle) + " currentPercentage: " + str(currentPercentage))
+            servo.moveTo(currentAngle)
+            time.sleep(1)
             timestamp = int(time.time())
     except KeyboardInterrupt:
         scrollphat.clear()

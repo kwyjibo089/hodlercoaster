@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import RPi.GPIO as GPIO
 import time
-
+import sys
 
 #Set function to calculate percent from angle
 def angle_to_percent (angle) :
@@ -18,7 +18,7 @@ def angle_to_percent (angle) :
 
 def moveTo (angle) :
     pwm.start(angle_to_percent(angle))
-    time.sleep(0.5)
+    time.sleep(0.4)
     #Close GPIO & cleanup
     pwm.stop()
     GPIO.cleanup()
@@ -33,4 +33,9 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(pwm_gpio, GPIO.OUT)
 
 pwm = GPIO.PWM(pwm_gpio, frequence)
+
+angle = int(sys.argv[1])
+
+moveTo(angle)
+
 
