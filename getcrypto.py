@@ -66,7 +66,7 @@ def moveTo (angle) :
     pwm.start(angle_to_percent(angle))
     time.sleep(0.5)
     #Close GPIO & cleanup
-    pwm.stop()
+    #pwm.stop()
     GPIO.cleanup()
 
 
