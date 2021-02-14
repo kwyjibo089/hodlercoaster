@@ -49,29 +49,6 @@ def update_price(ticker):
 
     return change
 
-<<<<<<< HEAD
-def angle_to_percent (angle) :
-    if angle > 180 or angle < 0 :
-        return False
-
-    start = 4
-    end = 12.5
-    ratio = (end - start)/180 #Calcul ratio from angle to percent
-
-    angle_as_percent = angle * ratio
-
-    return start + angle_as_percent
-
-<<<<<<< HEAD
-def moveTo (angle) :
-    pwm.start(angle_to_percent(angle))
-    time.sleep(0.5)
-    #Close GPIO & cleanup
-    #pwm.stop()
-    GPIO.cleanup()
-=======
-=======
->>>>>>> 02cb3ff948357a6972a98d1aa572cca53992320a
 def setAngle(angle):
     duty = angle / 18 + 3
     GPIO.output(pwm_gpio, True)
@@ -79,8 +56,6 @@ def setAngle(angle):
     time.sleep(1)
     GPIO.output(pwm_gpio, False)
     pwm.ChangeDutyCycle(duty)
->>>>>>> af08d0cf7eb1058fb6077d30e9e5fba37b36f051
-
 
 GPIO.setwarnings(False) #Disable warnings
 
